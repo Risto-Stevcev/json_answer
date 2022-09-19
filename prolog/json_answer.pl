@@ -1,4 +1,4 @@
-:- module(json_answer, [query/1]).
+:- module(json_answer, [query/1, query/2]).
 :- use_module(library(http/json)).
 
 
@@ -18,11 +18,14 @@ lower_var(VarEq, VarEqLower) :-
     VarEqLower =.. [=, Key2, Val].
 
 
-query(Qs) :-
+query(Qs, OutputStream) :-
     open_string(Qs, S),
     read_term(S, T, [variable_names(Vars)]),
     maplist(lower_var, Vars, Vars2),
     dict_create(Dict, _, Vars2),
     bagof(Dict, T, Res),
     atom_json_dict(Json, Res, []),
-    write(Json).
+    write(OutputStream, Json).
+
+query(Qs) :-
+    query(Qs, current_output).
