@@ -2,6 +2,7 @@
 :- use_module(library(http/json)).
 
 /** <module> Parse prolog compound terms into json
+ * This is a convenience module to convert a prolog query into a JSON answer for IPC
  */
 
 %! lowercase_atom(+Atom, -Atom)
