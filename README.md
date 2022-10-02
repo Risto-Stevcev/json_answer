@@ -8,15 +8,11 @@ This is useful for interop with prolog and another language.
 ## Usage
 
 ```sh
-λ swipl -f test.pl -g 'use_module(json_answer).'  -g 'query("friend(donna, MyFriend).").' -g halt | jq
-[
-  {
-    "myFriend": "eric"
-  },
-  {
-    "myFriend": "mary"
-  }
-]
+$ swipl -f prolog/json_answer.pl \
+  -g 'assert(foo(bar, baz))' -g 'assert(foo(bar, qux))' \
+  -g 'term_to_dict_list(foo(bar,_), D), json:json_write_dict(current_output, D)' \
+  -g halt
+[ {"foo": ["bar", "baz" ]},  {"foo": ["bar", "qux" ]} ]
 ```
 
 
