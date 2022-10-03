@@ -30,6 +30,9 @@ test('query/1') :-
 test(term_to_dict) :-
     term_to_dict(foo(bar, baz(123)), _{ foo: [bar, _{baz: 123}] }).
 
+test(term_to_dict) :-
+    term_to_dict(foobars:foo(bar, baz(123)), _{ foo: [bar, _{baz: 123}] }).
+
 test(term_to_dict_list) :-
     term_to_dict_list(foo(bar([1,2|_]), baz(_)), DictList),
     DictList = [_{foo:[_{bar:[1,2,3]},_{baz:qux}]},_{foo:[_{bar:[1,2,3,4,5]},_{baz:norf}]}].

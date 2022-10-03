@@ -51,16 +51,19 @@ query(Qs) :-
 %
 % Converts a compound term to a dict
 term_to_dict(Term, Dict) :-
-    (compound(Term), not(is_list(Term)) ->
-         Term =.. [Key,Value|Values],
-         (member(_, Values) ->
-              maplist(term_to_dict, [Value|Values], DictValue) ;
-              term_to_dict(Value, DictValue)
-         ),
-         dict_create(Dict, _, [Key-DictValue]) ;
-     (is_list(Term) ->
-          maplist(term_to_dict, Term, Dict) ;
-          Dict = Term)
+    (Term =.. [:,_,UnscopedTerm] ->
+     term_to_dict(UnscopedTerm, Dict) ;
+     (compound(Term), not(is_list(Term)) ->
+          Term =.. [Key, Value | Values],
+          (member(_, Values) ->
+               maplist(term_to_dict, [Value|Values], DictValue) ;
+           term_to_dict(Value, DictValue)
+          ),
+          dict_create(Dict, _, [Key-DictValue]) ;
+      (is_list(Term) ->
+           maplist(term_to_dict, Term, Dict) ;
+       Dict = Term)
+     )
     ).
 
 %! term_to_dict_list(+Term, -DictList) is semidet
